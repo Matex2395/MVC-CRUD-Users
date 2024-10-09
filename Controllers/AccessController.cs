@@ -53,5 +53,24 @@ namespace MVC_CRUD_Users.Controllers
             ViewData["Message"] = "Ha ocurrido un error al registrar el usuario.";
             return View();
         }
+
+        [HttpGet]
+        public IActionResult Login()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Login(LoginVM model)
+        {
+            User? found_user = await _db.Users.FirstOrDefaultAsync(u => u.Email == model.Email && u.Password == model.Password);
+            if(found_user != null)
+            {
+                ViewData["Message"] = "No se encontraron coincidencias.";
+                return View();
+            }
+            return RedirectToAction("Index", "Home");
+
+        }
     }
 }
