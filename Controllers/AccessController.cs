@@ -8,6 +8,9 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.EntityFrameworkCore;
 using MVC_CRUD_Users.Models;
 using MVC_CRUD_Users.ViewModels;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 namespace MVC_CRUD_Users.Controllers
 {
@@ -69,6 +72,22 @@ namespace MVC_CRUD_Users.Controllers
                 ViewData["Message"] = "No se encontraron coincidencias.";
                 return View();
             }
+
+            List<Claim> claims = new List<Claim>()
+            {
+                new Claim(ClaimTypes.Name, found_user.Name)
+            };
+
+            ClaimsIdentity claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+            AuthenticationProperties properties = new AuthenticationProperties()
+            {
+                AllowRefresh = true,
+            };
+
+            await HttpContext.SignInAsync(
+                CookieAuthenticationDefaults.AuthenticationScheme, 
+                new ClaimsPrincipal(claimsIdentity), 
+                properties);
             return RedirectToAction("Index", "Home");
 
         }

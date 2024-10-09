@@ -1,8 +1,15 @@
-﻿@{
+﻿@using System.Security.Claims;
+@{
     ViewData["Title"] = "Home Page";
 }
 
 <div class="text-center">
-    <h1 class="display-4">¡BIENVENIDO!</h1>
+    @if (User.Identity!.IsAuthenticated)
+    {
+        <h1 class="display-4">¡BIENVENIDO!
+            @User.Claims.Where(c => c.Type == ClaimTypes.Name).Select(c => c.Value).SingleOrDefault()
+        </h1>
+    }
+    
     <p>Este es mi proyecto CRUD para gestionar usuarios... <a href="https://www.youtube.com/watch?v=BY_XwvKogC8">Esta es mi canción favorita :3</a>.</p>
 </div>
