@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace MVC_CRUD_Users.Controllers
 {
+    [Authorize]
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
@@ -32,7 +33,7 @@ namespace MVC_CRUD_Users.Controllers
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
 
-        public async Task<IActionResult> SignOut()
+        public async Task<IActionResult> CerrarSesión()
         {
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
             return RedirectToAction("Login", "Access");
